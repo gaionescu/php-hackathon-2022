@@ -121,7 +121,7 @@ In this section, please let us know what is your opinion about this experience a
 
 3. What's your opinion about the complexity of the requirements?
 
-   The requirements we have to meet in this application require a degree of experience in this area.
+   The requirements are well suited for this kind of project
 
 4. What did you enjoy the most?
 
@@ -137,7 +137,7 @@ In this section, please let us know what is your opinion about this experience a
 
 7. Did you find the resources you were sent on your email useful?
 
-   I have used the links in the email to install and start using Postman
+   Yes
 
 8. Is there anything you would like to improve to your current implementation?
 
