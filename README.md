@@ -106,6 +106,8 @@ In this section, please list the steps and/ or tools you've used in order to tes
 
 In order to check the application functionality I have used Postman. It was also useful to simulate the login conditions. For this, the access token needed to be inserted as a bearer token in the authorization tab.
 
+For the GET routes, the request input was inserted in the url as parameters. For POST routes, they were inserted in the body, inside a url encoded form type.
+
 ## Feedback
 In this section, please let us know what is your opinion about this experience and how we can improve it:
 
