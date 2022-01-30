@@ -25,9 +25,10 @@ The application database is composed of 4 tables:
 
 -Gym rooms
 
-For this application, the users only needed one field, which is the CNP field. It is an unique value, corresponding to a user. In order to be able to use the built in functions of the authentication package from Laravel Passport and not get any errors, the normal user fields have been kept in the database.
+For this application, the users only needed one field, which is the CNP field. It is an unique value, corresponding to a user. In order to be able to use the built in functions of the authentication package from Laravel Passport and not get any errors, the normal user fields have been kept in the database, with null values.
+In order to implement administrator users, this table also contains a adminToken field, which is null for every user except admins.
 
-In the programmes table, the class type(string), gym room id(foreign key), maximum number of participants(integer), and the time interval(two datetime values) from each programme are stored.
+In the programmes table, values from rom each programme are stored. Those are the class type, gym room id, maximum number of participants, and the time interval(two datetime values).
 
 The participations table is a join table which contains rows of participations between users and programmes. It contains the id of the programme and the id of the user.
 
@@ -67,7 +68,7 @@ The index function from the ProgrammeController is used in order to return all t
 The view programme function requires a single parameter, the id of the programme. It uses the <i>show</i> function from ProgrammeController and returns a programme object.
 
 ###### Create programme
-In order to create a programme, the administrator has to insert the parameters into the request. After validating the request items, multiple checks need to be made. The gym room in which the programme takes place needs to be empty in the time interval. If the time interval corresponds with another programme time interval, and error message will be returned. If the gym room id inside the request does not provide an existing gym room, an error message is returned.
+In order to create a programme, the administrator has to insert the parameters into the request. After validating the request items, multiple checks need to be made. The gym room in which the programme takes place needs to be empty in the time interval. If the time interval corresponds with another programme time interval, an error message will be returned. If the gym room id inside the request does not provide an existing gym room, an error message is returned. If everything is ok, a new row will be added to the programmes table.
 
 ###### Delete programme
 An administrator requesting the delete action will provide the id of the programme which he wants to delete. The function <i>destroy</i> from ProgrammeController will be called. If the programme id does not correspond to a row in the table, an error message will appear. Otherwise it will be deleted from the database.
@@ -149,4 +150,4 @@ In this section, please let us know what is your opinion about this experience a
    -The update programme function could be implemented
 
 9. What would you change regarding this anti hackathon?
-   It is as good as it gets
+   -It is as good as it gets
