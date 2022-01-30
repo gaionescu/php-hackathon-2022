@@ -35,6 +35,9 @@ The participations table is a join table which contains rows of participations b
 The gym rooms table contains only the names of the gym rooms. As it has been described in the problem statement, the rooms cannot be modified, added or removed, so the application does not contain CRUD operations for them. Because of this, the application contains a gym room factory, for initializing a certain number of rooms int the seeder each time a fresh migration happens(with '--seed' in the end). An administrator user is also implemented in the seeder.
 
 
+The relationships in this database have been implemented using the hasMany and belongsTo functions.
+
+
 ![image](https://user-images.githubusercontent.com/48053642/151707839-77f59c26-8ada-4eb6-a852-166d541b6ae4.png)
 
 
@@ -68,7 +71,7 @@ The index function from the ProgrammeController is used in order to return all t
 The view programme function requires a single parameter, the id of the programme. It uses the <i>show</i> function from ProgrammeController and returns a programme object.
 
 ###### Create programme
-In order to create a programme, the administrator has to insert the parameters into the request. After validating the request items, multiple checks need to be made. The gym room in which the programme takes place needs to be empty in the time interval. If the time interval corresponds with another programme time interval, an error message will be returned. If the gym room id inside the request does not provide an existing gym room, an error message is returned. If everything is ok, a new row will be added to the programmes table.
+In order to create a programme, the administrator has to insert the parameters into the request. After validating the request items, multiple checks need to be made. The gym room in which the programme takes place needs to be empty in the time interval. If the time interval corresponds with another programme time interval, an error message will be returned, as well as if the begin time value is bigger than the end time. If the gym room id inside the request does not provide an existing gym room, an error message is returned. If everything is ok, a new row will be added to the programmes table.
 
 ###### Delete programme
 An administrator requesting the delete action will provide the id of the programme which he wants to delete. The function <i>destroy</i> from ProgrammeController will be called. If the programme id does not correspond to a row in the table, an error message will appear. Otherwise it will be deleted from the database.
@@ -87,6 +90,10 @@ Please highlight all the validations and mechanisms you identified as necessary 
 -Two or more programmes cannot take place in the same gym room and at the same time
 
 -A user cannot participate to two programmes that take place at the same time
+
+-Begin programme date and time must be before the end date and time
+
+-A user cannot participate in a programme that has achieved the maximum number of participants
 
 ##### 3rd party libraries (if applicable)
 Please give a brief review of the 3rd party libraries you used and how/ why you've integrated them into your project.
@@ -117,23 +124,23 @@ In this section, please let us know what is your opinion about this experience a
 
 2. Do you think this type of selection process is suitable for you?
 
-   I think it is very efficient. It challenges people to improve their knowledge
+   I liked it. It enabled me to learn and improve my skills.
 
 3. What's your opinion about the complexity of the requirements?
 
-   The requirements are well suited for this kind of project
+   The requirements are well suited for this kind of project. 
 
 4. What did you enjoy the most?
 
-   Getting to improve my programming skills, and practicing
+   Getting to practice, challenge myself.
 
 5. What was the most challenging part of this anti hackathon?
 
-   Learning to build my first API
+   Learning to build my first API.
 
 6. Do you think the time limit was suitable for the requirements?
 
-   The time limit for the application is enough for us to implement everything we know.
+   For the full completion of the task, more time would be needed.
 
 7. Did you find the resources you were sent on your email useful?
 
