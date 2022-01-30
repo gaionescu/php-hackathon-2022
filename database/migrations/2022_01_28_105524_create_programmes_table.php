@@ -16,11 +16,11 @@ class CreateProgrammesTable extends Migration
         Schema::create('programmes', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string("clasa");
-            $table->integer("locuri");
-            $table->integer("sala");
-            $table->dateTime("from");
-            $table->dateTime("to");
+            $table->string('class');
+            $table->integer("locuri")->default(0);
+            $table->foreignId("sala_id")->constrained();
+            $table->dateTime("from")->default(NOW());
+            $table->dateTime("to")->default(NOW());
         });
     }
 

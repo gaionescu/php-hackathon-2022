@@ -10,10 +10,19 @@ class Programme extends Model
     use HasFactory;
 
     protected $fillable=[
-      'titlu',
       'locuri',
       'sala',
       'from',
       'to',
+      'class',
     ];
+
+    public function sala(){
+        return $this->belongsTo(Sala::class);
+    }
+
+    public function participari(){
+        return $this->hasMany(Participari::class);
+    }
+
 }
