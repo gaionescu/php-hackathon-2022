@@ -14,19 +14,78 @@ You have estimated it takes 4 weeks to build this solution. You have 3 days. Goo
 ## Technical documentation
 ### Data and Domain model
 In this section, please describe the main entities you managed to identify, the relationships between them and how you mapped them in the database.
+
+The application database is composed of 4 tables:
+
+-Programmes
+
+-Users
+
+-Participations
+
+-Gym rooms
+
+For this application, the users only needed one field, which is the CNP field. It is an unique value, corresponding to a user. In order to be able to use the built in functions of the authentication package from Laravel Passport and not get any errors, the normal user fields have been kept in the database.
+
+In the programmes table, the class type(string), gym room id(foreign key), maximum number of participants(integer), and the time interval(two datetime values) from each programme are stored.
+
+The participations table is a join table which contains rows of participations between users and programmes. It contains the id of the programme and the id of the user.
+
+The gym rooms table contains only the names of the gym rooms. As it has been described in the problem statement, the rooms cannot be modified, added or removed, so the application does not contain CRUD operations for them. Because of this, the application contains a gym room factory, for initializing a certain number of rooms int the seeder each time a fresh migration happens(with '--seed' in the end). An administrator user is also implemented in the seeder.
+
+
+![image](https://user-images.githubusercontent.com/48053642/151707839-77f59c26-8ada-4eb6-a852-166d541b6ae4.png)
+
+
 ### Application architecture
 In this section, please provide a brief overview of the design of your application and highlight the main components and the interaction between them.
+
+The application architecture of choice is Model-View-Controller, implemented in Laravel framework.The main components of the application are programmes, users, gym rooms and participations, each of them having models, and some of them having controllers as well.
+
 ###  Implementation
 ##### Functionalities
 For each of the following functionalities, please tick the box if you implemented it and describe its input and output in your application:
 
 [x] Brew coffee \
-[ ] Create programme \
-[ ] Delete programme \
-[ ] Book a programme 
+[x] Visualise programmes \
+[x] View programme \
+[x] Create programme \
+[x] Delete programme \
+[x] Book a programme \
+[x] Cancel booking 
+
+Visualising the programmes is available for unauthenticated users too. The authentication is based on the CNP. If a user's CNP is not memorized in the database, then he can register using a valid one. All the post functions have been implemented using the auth:api middleware, from the Laravel Passport package. The package is required in order to generate access tokens.
+
+Every post function also has validators.
+
+The only users that are able to use the create and delete programme function are the administrators. They have a string that is not null which acts as an adminToken.
+
+###### Visualise programmes
+The index function from the ProgrammeController is used in order to return all the programmes in the database. A programmeResource is implemented for this.
+
+###### View programme
+The view programme function requires a single parameter, the id of the programme. It uses the <i>show</i> function from ProgrammeController and returns a programme object.
+
+###### Create programme
+In order to create a programme, the administrator has to insert the parameters into the request. After validating the request items, multiple checks need to be made. The gym room in which the programme takes place needs to be empty in the time interval. If the time interval corresponds with another programme time interval, and error message will be returned. If the gym room id inside the request does not provide an existing gym room, an error message is returned.
+
+###### Delete programme
+An administrator requesting the delete action will provide the id of the programme which he wants to delete. The function <i>destroy</i> from ProgrammeController will be called. If the programme id does not correspond to a row in the table, an error message will appear. Otherwise it will be deleted from the database.
+
+###### Book a programme
+The users that want to participate to the programme will request participation. The function <i>participa</i> from UserController will be called, and then will carry the input through multiple validations. The function will check if the user is already a participant, if the programme is full of participants or not and will check if the user is a participant in any other programmes that happen at the same time. If it passes all of the validations a Participari row will be added.
+
+###### Cancel a booking
+If a user is participating in a programme, and decides to cancel it, he will need to provide the id of the programme. The system will search for rows in the table with the corresponding programme id and user id. If he finds none he recieves an error message. Otherwise, if there is a row in the table, it will be deleted and a success message will appear.
 
 ##### Business rules
 Please highlight all the validations and mechanisms you identified as necessary in order to avoid inconsistent states and apply the business logic in your application.
+
+-Two or more users cannot have the same CNP
+
+-Two or more programmes cannot take place in the same gym room and at the same time
+
+-A user cannot participate to two programmes that take place at the same time
 
 ##### 3rd party libraries (if applicable)
 Please give a brief review of the 3rd party libraries you used and how/ why you've integrated them into your project.
@@ -35,25 +94,59 @@ Please give a brief review of the 3rd party libraries you used and how/ why you'
 Please fill in the following table with the technologies you used in order to work at your application. Feel free to add more rows if you want us to know about anything else you used.
 | Name | Choice |
 | ------ | ------ |
-| Operating system (OS) | e.g. Ubuntu 20.04 |
+| Operating system (OS) | Windows |
 | Database  | e.g. MySQL 8.0|
-| Web server| e.g. Nginx |
-| PHP | e.g. 7.0 |
-| IDE | e.g. PhpStorm |
+| Web server| PHP localhost |
+| PHP | 8.0.1 |
+| IDE | e.g. PhpStorm 2021.1.2 |
 
 ### Testing
 In this section, please list the steps and/ or tools you've used in order to test the behaviour of your solution.
+
+In order to check the application functionality I have used Postman. It was also useful to simulate the login conditions. For this, the access token needed to be inserted as a bearer token in the authorization tab.
 
 ## Feedback
 In this section, please let us know what is your opinion about this experience and how we can improve it:
 
 1. Have you ever been involved in a similar experience? If so, how was this one different?
-2. Do you think this type of selection process is suitable for you?
-3. What's your opinion about the complexity of the requirements?
-4. What did you enjoy the most?
-5. What was the most challenging part of this anti hackathon?
-6. Do you think the time limit was suitable for the requirements?
-7. Did you find the resources you were sent on your email useful?
-8. Is there anything you would like to improve to your current implementation?
-9. What would you change regarding this anti hackathon?
 
+   -This is my first anti hackaton
+
+2. Do you think this type of selection process is suitable for you?
+
+   I think it is very efficient. It challenges people to improve their knowledge
+
+3. What's your opinion about the complexity of the requirements?
+
+   The requirements we have to meet in this application require a degree of experience in this area.
+
+4. What did you enjoy the most?
+
+   Getting to improve my programming skills, and practicing
+
+5. What was the most challenging part of this anti hackathon?
+
+   Learning to build my first API
+
+6. Do you think the time limit was suitable for the requirements?
+
+   The time limit for the application is enough for us to implement everything we know.
+
+7. Did you find the resources you were sent on your email useful?
+
+   I have used the links in the email to install and start using Postman
+
+8. Is there anything you would like to improve to your current implementation?
+
+   There is room for improvement in my application:
+   
+   -The gym room row could have a column in which is indicated what type of programmes can take place
+   
+   -Some of the table names are funny
+   
+   -The application could support login from 3rd party applications
+   
+   -The update programme function could be implemented
+
+9. What would you change regarding this anti hackathon?
+   It is as good as it gets
