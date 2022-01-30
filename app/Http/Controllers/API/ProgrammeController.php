@@ -45,6 +45,10 @@ class ProgrammeController extends Controller
                 'to' => 'required'
             ]);
 
+            if($request->from<$request->to){
+                return response(['message'=>'Ora de inceput trebuie sa fie inaintea orei final'],403);
+            }
+            
             $salavalidator = Sala::where('id', $request->sala_id)->first();
             if ($salavalidator == null) {
                 return response(['message' => 'sala invalida'], 400);
